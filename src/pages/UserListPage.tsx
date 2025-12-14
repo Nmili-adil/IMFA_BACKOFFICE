@@ -1,71 +1,97 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { userColumns } from "@/components/users/columns";
 import { DataTable } from "@/components/users/data-table";
-import type { User } from "@/types/users";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useUserStore } from "@/stores/userStore";
 
 // data
-const users: User[] = [
+/*const users: User[] = [
   {
     id: "1",
-    name: "Alice",
-    email: "alice@example.com",
+    nomEmp: "Alice",
+    emailEmp: "alice@example.com",
+    adressEmp: "Morocco",
+    mobileEmp: "0629273569",
+    dateNaissanceEmp: "2004/02/02",
     role: "Admin",
     status: "Active",
-    avatar: "https://github.com/shadcn.png",
+    image: "https://github.com/shadcn.png",
   },
   {
     id: "2",
-    name: "Bob",
-    email: "bob@example.com",
+    nomEmp: "Alice",
+    emailEmp: "alice@example.com",
+    mobileEmp: "0629273569",
+    adressEmp: "Morocco",
+    dateNaissanceEmp: "2004/02/02",
     role: "Receptionist",
     status: "Inactive",
-    avatar: "https://github.com/shadcn.png",
+    image: "https://github.com/shadcn.png",
   },
   {
     id: "3",
-    name: "Bob",
-    email: "bob@example.com",
+    nomEmp: "Alice",
+    emailEmp: "alice@example.com",
+    mobileEmp: "0629273569",
+    adressEmp: "Morocco",
+    dateNaissanceEmp: "2004/02/02",
     role: "Receptionist",
     status: "Active",
-    avatar: "https://github.com/shadcn.png",
+    image: "https://github.com/shadcn.png",
   },
   {
     id: "4",
-    name: "Bob",
-    email: "bob@example.com",
+    nomEmp: "Alice",
+    emailEmp: "alice@example.com",
+    mobileEmp: "0629273569",
+    adressEmp: "Morocco",
+
+    dateNaissanceEmp: "2004/02/02",
     role: "Manager",
     status: "Active",
-    avatar: "https://github.com/shadcn.png",
+    image: "https://github.com/shadcn.png",
   },
   {
     id: "5",
-    name: "Bob",
-    email: "bob@example.com",
+    nomEmp: "Alice",
+    emailEmp: "alice@example.com",
+    mobileEmp: "0629273569",
+    adressEmp: "Morocco",
+    dateNaissanceEmp: "2004/02/02",
     role: "Receptionist",
     status: "Active",
-    avatar: "https://github.com/shadcn.png",
+    image: "https://github.com/shadcn.png",
   },
   {
     id: "6",
-    name: "Bob",
-    email: "bob@example.com",
+    nomEmp: "Alice",
+    emailEmp: "alice@example.com",
+    mobileEmp: "0629273569",
+    adressEmp: "Morocco",
+    dateNaissanceEmp: "2004/02/02",
     role: "Receptionist",
     status: "Active",
-    avatar: "https://github.com/shadcn.png",
+    image: "https://github.com/shadcn.png",
   },
-];
+];*/
 
 export default function UserListPage() {
+  const { users, loading, fetchUsers } = useUserStore();
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
   const [search, setSearch] = useState("");
 
   const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(search.toLowerCase())
+    user.nomEmp.toLowerCase().includes(search.toLowerCase())
   );
   return (
     <div className="h-screen flex mt-12 justify-center p-4">
-      <div className="w-full max-w-4xl">
+      <div className="w-full max-w-7xl">
         <h1 className="text-2xl font-semibold mb-6">User Management</h1>
         <div className="bg-gray shadow-md rounded-xl p-6">
           {/*TopBar*/}
@@ -81,6 +107,7 @@ export default function UserListPage() {
             </Button>
           </div>
           {/*UsersTable*/}
+          {loading && <p>Loading users...</p>}
           <DataTable columns={userColumns} data={filteredUsers} />
         </div>
       </div>

@@ -6,31 +6,52 @@ import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 
 export const userColumns: ColumnDef<User>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "id",
+    header: "id",
+    cell: ({ row }) => <span>{row.original.rfid}</span>,
+  },
+  {
+    accessorKey: "nomEmp",
     header: "Full Name",
     cell: ({ row }) => (
       <div className="flex items-center gap-3">
         <Avatar className="h-9 w-9">
           <AvatarImage
-            src={row.original.avatar}
+            src={row.original.image}
             className="h-9 w-9 rounded-full"
-            alt={row.original.name}
+            alt={row.original.nomEmp}
           />
         </Avatar>
-        <span className="font-medium">{row.original.name}</span>
+        <span className="font-medium">{row.original.nomEmp}</span>
       </div>
     ),
+  },
+
+  {
+    accessorKey: "mobileEmp",
+    header: "PhoneNumber",
+    cell: ({ row }) => <span>{row.original.mobileEmp}</span>,
   },
   {
     accessorKey: "email",
     header: "Email Address",
-    cell: ({ row }) => <span>{row.original.email}</span>,
+    cell: ({ row }) => <span>{row.original.emailEmp}</span>,
+  },
+  {
+    accessorKey: "adressEmp",
+    header: "Adress",
+    cell: ({ row }) => <span>{row.original.adressEmp}</span>,
+  },
+  {
+    accessorKey: "dateNaissanceEmp",
+    header: "BirthDay",
+    cell: ({ row }) => <span>{row.original.dateNaissanceEmp}</span>,
   },
   {
     accessorKey: "role",
     header: "Role",
     cell: ({ row }) => {
-      const role = row.original.role;
+      const role = row.original.roles?.name || "Unknown";
       let color = "bg-gray-200 text-gray-800";
       let icon = <UserIcon className="mr-1" />;
 
@@ -43,7 +64,7 @@ export const userColumns: ColumnDef<User>[] = [
           color = "bg-blue-100 text-blue-800";
           icon = <Users className="mr-1" />;
           break;
-        case "Receptionist":
+        case "Réceptionniste":
           color = "bg-green-100 text-green-800";
           icon = <UserIcon className="mr-1" />;
           break;
@@ -89,13 +110,13 @@ export const userColumns: ColumnDef<User>[] = [
       <div className="flex gap-2">
         <button
           className="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1 rounded-md"
-          onClick={() => console.log("Edit", row.original.id)}
+          onClick={() => console.log("Edit", row.original.rfid)}
         >
           Edit
         </button>
         <button
           className="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1 rounded-md"
-          onClick={() => console.log("delete", row.original.id)}
+          onClick={() => console.log("delete", row.original.rfid)}
         >
           Delete
         </button>

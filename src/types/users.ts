@@ -1,8 +1,12 @@
 export type User = {
-  id: string
-  name: string
-  email: string
-  role: "Admin" | "Receptionist" | "Manager"
+  rfid: string
+  nomEmp: string
+  emailEmp: string
+  mobileEmp:string
+  adressEmp:string
+  dateNaissanceEmp:string
+   role_id: number
+  roles?: { id: number; name: string }
   status: "Active" | "Inactive"
-  avatar?: string
+  image?: string
 }
