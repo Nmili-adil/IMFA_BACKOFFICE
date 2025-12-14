@@ -11,4 +11,10 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    watch: {
+      // Reduce file watcher usage
+      ignored: ['**/node_modules/**', '**/.git/**'],
+    },
+  },
 })
