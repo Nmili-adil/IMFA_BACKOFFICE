@@ -4,7 +4,10 @@ import { Badge } from "@/components/ui/badge"; // or your UI library
 import { CheckCircle, UserCheck, UserIcon, Users, XCircle } from "lucide-react";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 
-export const userColumns: ColumnDef<User>[] = [
+export const userColumns = (
+  onEdit: (user: User) => void,
+  onDelete: (user: User) => void
+): ColumnDef<User>[] => [
   {
     accessorKey: "id",
     header: "id",
@@ -110,13 +113,13 @@ export const userColumns: ColumnDef<User>[] = [
       <div className="flex gap-2">
         <button
           className="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1 rounded-md"
-          onClick={() => console.log("Edit", row.original.rfid)}
+          onClick={() => onEdit(row.original)}
         >
           Edit
         </button>
         <button
           className="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1 rounded-md"
-          onClick={() => console.log("delete", row.original.rfid)}
+          onClick={() => onDelete(row.original)}
         >
           Delete
         </button>

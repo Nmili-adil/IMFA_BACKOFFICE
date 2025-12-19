@@ -5,6 +5,9 @@ import { DataTable } from "@/components/users/data-table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/stores/userStore";
+import { EditUserDialog } from "@/components/editUserForm";
+import { DeleteUserDialog } from "@/components/DeleteUserDialog";
+import { AddUserForm } from "@/components/addUserForm";
 
 // data
 /*const users: User[] = [
@@ -78,6 +81,22 @@ import { useUserStore } from "@/stores/userStore";
 ];*/
 
 export default function UserListPage() {
+  /*Edit button logic */
+  const [editOpen, setEditOpen] = useState(false);
+  const handleEditClick = () => {
+    setEditOpen(true);
+  };
+
+  /*Delete Button */
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const handleDeleteClick = () => {
+    setDeleteOpen(true); //justForDialogOpening
+  };
+  //AdduserForm
+  const [isAddOpen, setIsAddOpen] = useState(false);
+
+  /*fetching data */
   const { users, loading, fetchUsers } = useUserStore();
 
   useEffect(() => {
@@ -102,13 +121,25 @@ export default function UserListPage() {
               onChange={(e) => setSearch(e.target.value)}
               className="w-64"
             />
-            <Button className="bg-blue-600 text-white hover:bg-blue-700 cursor-pointer">
+            <Button
+              className="bg-blue-600 text-white hover:bg-blue-700 cursor-pointer"
+              onClick={() => setIsAddOpen(true)}
+            >
               Add User
             </Button>
           </div>
           {/*UsersTable*/}
           {loading && <p>Loading users...</p>}
-          <DataTable columns={userColumns} data={filteredUsers} />
+          <DataTable
+            columns={userColumns(handleEditClick, handleDeleteClick)}
+            data={filteredUsers}
+          />
+          <EditUserDialog open={editOpen} onClose={() => setEditOpen(false)} />
+          <DeleteUserDialog
+            open={deleteOpen}
+            onClose={() => setDeleteOpen(false)}
+          />
+          <AddUserForm open={isAddOpen} onClose={() => setIsAddOpen(false)} />
         </div>
       </div>
     </div>
