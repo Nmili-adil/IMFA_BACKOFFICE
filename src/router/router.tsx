@@ -1,5 +1,6 @@
 import LoginPage from "@/pages/loginPage";
 import DashboardPage from "@/pages/dashboardPage";
+import ProfilePage from "@/pages/profilePage";
 import { createBrowserRouter } from "react-router-dom";
 import { ProtectedRoute } from "@/components/shared/ProtectedRoute";
 import Layout from "@/app/layout/_layout";
@@ -10,21 +11,25 @@ const Router = createBrowserRouter([
     element: <LoginPage />,
   },
   {
-    element: <ProtectedRoute />,
+    // element: <ProtectedRoute />,
+    // children: [
+    //   {
+    path: "/",
+    element: <Layout />,
     children: [
       {
-        path: "/",
+        index: true,
         element: <DashboardPage />,
-        children: [
-          {
-            index: true,
-            element: <DashboardPage />,
-          },
-          // Add more protected routes here
-        ],
       },
+      {
+        path: "profile",
+        element: <ProfilePage />,
+      },
+      // Add more protected routes here
     ],
   },
+  // ],
+  // },
 ]);
 
 export default Router;

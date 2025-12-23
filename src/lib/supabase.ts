@@ -15,7 +15,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
 });
 
-// Database Types
 export interface Role {
   id: number;
   created_at: string;
@@ -33,10 +32,68 @@ export interface User {
   emailEmp: string;
   image: string | null;
   role_id: number | null;
-  role?: Role; // Joined role data
+  role?: Role; 
 }
 
-// Helper function to check if role allows admin access
+export interface Client {
+  id: string;
+  created_at: string;
+  nom: string;
+  prenom: string;
+  CIN: string;
+  email: string;
+  telephone: string;
+  statut_social: string;
+  date_naissance: string;
+  adresse: string;
+  genre: string;
+}
+
+export interface Reservation {
+  id: string;
+  status: string;
+  created_at: string;
+  clientId: string;
+  userId: string;
+  date_debut: string;
+  date_fin: string;
+  nbNights: number;
+  room_id: string;
+}
+
+export interface Room {
+  id: string;
+  created_at: string;
+  numChambre: string;
+  typeChambre: string;
+  status: string;
+  pricePerNight: number;
+  capacity: number;
+  surface: number;
+  image: string | null;
+  bathrooms: number;
+  equipements: string[];
+  vue: string | null;
+}
+
+export interface ReservationRoom {
+  id: string;
+  created_at: string;
+  reservation_id: string;
+  room_id: string;
+}
+
+export interface Invoice {
+  id: string;
+  created_at: string;
+  invoice_number: string;
+  date_invoice: string;
+  status: string;
+  total_amount: number;
+  reservation_id: string;
+}
+
+// roles 
 export const hasAdminAccess = (roleName: string | null | undefined): boolean => {
   if (!roleName) return false;
   if (typeof roleName !== 'string') return false;
@@ -44,17 +101,17 @@ export const hasAdminAccess = (roleName: string | null | undefined): boolean => 
   return adminRoles.includes(roleName.toLowerCase());
 };
 
-// Helper function to check if user is super admin
+// super admin
 export const isSuperAdmin = (roleName: string | null | undefined): boolean => {
   return roleName?.toLowerCase() === 'super-admin';
 };
 
-// Helper function to check if user is manager
+// manager
 export const isManager = (roleName: string | null | undefined): boolean => {
   return roleName?.toLowerCase() === 'manager';
 };
 
-// Helper function to check if user is admin
+// admin
 export const isAdmin = (roleName: string | null | undefined): boolean => {
   return roleName?.toLowerCase() === 'admin';
 };
