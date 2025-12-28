@@ -12,6 +12,14 @@ export const ROUTES = {
   LOGIN: '/login',
   HOME: '/',
   DASHBOARD: '/dashboard',
+  ROOMS: '/rooms',
+  ROOMSNEW: '/rooms/create',
+  ROOMEDIT: '/rooms/:id/edit',
+  ROOMDETAILS: '/rooms/:id',
+  ROOMSMAINTENANCE: '/rooms/maintenance',
+  ROOMSAVAILABLE: '/rooms/available',
+  SERVICENEW: '/services/create',
+  PROFILE: '/profile',
   // Add more routes as needed
 } as const;
 
