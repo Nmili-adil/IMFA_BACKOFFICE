@@ -5,7 +5,8 @@ import AuthInit from "./authInit";
 const App = () =>{
 return (
     <>
-       <AuthInit/>
+
+       <AuthInit />
         <RouterProvider router={Router} />
     </>
 

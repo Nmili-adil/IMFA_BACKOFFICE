@@ -1,80 +1,66 @@
-import {create} from 'zustand'
-import {supabase} from '@/lib/supabaseClient'
-import type {User} from '@supabase/supabase-js';
+import { create } from 'zustand';
+import { supabase } from '@/lib/supabaseClient';
 
 interface AuthState {
-  user: User | null;
+  rfid: number | null;             
   userLoaded: boolean;
 
   permissions: string[];
   permissionsLoaded: boolean;
 
-  setUser: (user: User | null) => void;
+  setRFID: (rfid: number | null) => void;
   setPermissions: (permissions: string[]) => void;
 
   logout: () => void;
   fetchUserPermissions: () => Promise<void>;
 }
 
-
 export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
+  rfid: null,
   userLoaded: false,
-
   permissions: [],
   permissionsLoaded: false,
 
   // Actions
-  setUser: (user) => set({ user, userLoaded: true }),
-
+  setRFID: (rfid) => set({ rfid, userLoaded: true }),
   setPermissions: (permissions) =>
     set({ permissions, permissionsLoaded: true }),
-
   logout: () =>
     set({
-      user: null,
+      rfid: null,
       permissions: [],
       userLoaded: true,
       permissionsLoaded: true,
     }),
 
-  // Fetch user + permissions
   fetchUserPermissions: async () => {
     try {
-      const { data: session } = await supabase.auth.getSession();
+      // 🔹 Hardcoded RFID bach njarrbo
+      const testRFID = 123456789; // number
+      console.log("🔥 Using test RFID:", testRFID);
 
-      if (!session?.session?.user) {
-        set({ user: null, userLoaded: true, permissionsLoaded: true });
-        return;
+      // call RPC
+      const { data, error } = await supabase.rpc(
+        "get_user_permissions_by_rfid",
+        { p_rfid: testRFID }
+      );
+
+      if (error) throw error;
+
+      console.log("✅ RPC data returned:", data);
+
+      if (data && data.length > 0) {
+        const perms = data.map((p: any) => p.permission_name);
+        set({ permissions: perms, permissionsLoaded: true });
+        console.log("✅ Store permissions:", useAuthStore.getState().permissions);
+      } else {
+        set({ permissions: [], permissionsLoaded: true });
+        console.log("⚠️ No permissions found for this RFID");
       }
 
-      const user = session.session.user;
-      set({ user, userLoaded: true });
-
-      // fetch role_id
-      const { data: users, error: usersError } = await supabase
-        .from("users")
-        .select("role_id")
-        .eq("id", user.id)
-        .single();
-
-      if (usersError) throw usersError;
-
-      // fetch permissions
-      const { data: perms, error: permError } = await supabase
-        .from("role_permissions")
-        .select("permission_id")
-        .eq("role_id", users.role_id);
-
-      if (permError) throw permError;
-
-      set({
-        permissions: perms.map((p) => p.permission_id),
-        permissionsLoaded: true,
-      });
-    } catch (error) {
-      console.error(error);
-      set({ userLoaded: true, permissionsLoaded: true });
+    } catch (err) {
+      console.error("❌ Fetch error:", err);
+      set({ permissionsLoaded: true });
     }
-  },
+  }
 }));
